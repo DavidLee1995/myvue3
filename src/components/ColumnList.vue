@@ -1,11 +1,3 @@
-<!--
- * @Description:
- * @Version: 2.0
- * @Autor: LXL
- * @Date: 2020-10-07 22:42:33
- * @LastEditors: LXL
- * @LastEditTime: 2020-10-08 00:32:44
--->
 <template>
   <div class="row">
     <div v-for="column in columnList" :key="column.id" class="col-4 mb-4">
@@ -26,6 +18,7 @@
     </div>
   </div>
 </template>
+
 <script lang="ts">
 import { defineComponent, PropType, computed } from 'vue'
 export interface ColumnProps {
@@ -44,7 +37,7 @@ export default defineComponent({
   },
   setup (props) {
     const columnList = computed(() => {
-      return props.list.map((column) => {
+      return props.list.map(column => {
         if (!column.avatar) {
           column.avatar = require('@/assets/column.jpg')
         }
