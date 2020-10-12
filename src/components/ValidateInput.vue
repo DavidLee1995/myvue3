@@ -14,7 +14,8 @@
   </div>
 </template>
 <script lang='ts'>
-import { defineComponent, reactive, PropType } from 'vue'
+import { defineComponent, reactive, PropType, onMounted } from 'vue'
+import { emitter } from './ValidateForm.vue'
 const emailReg = /^([a-zA-Z]|[0-9])(\w|\\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
 interface RuleProp {
   type: 'required' | 'email' | 'password';
@@ -29,8 +30,6 @@ export default defineComponent({
   },
   inheritAttrs: false, // 不希望組件继承根元素
   setup (props, context) {
-    console.log(context.attrs)
-
     const inputRef = reactive({
       val: props.modelValue || '',
       error: false,
@@ -38,7 +37,7 @@ export default defineComponent({
     })
     const validateInput = () => {
       if (props.rules) {
-        const appPassed = props.rules.every((rule) => {
+        const allPassed = props.rules.every((rule) => {
           let passed = true
           inputRef.message = rule.message
           switch (rule.type) {
@@ -56,14 +55,19 @@ export default defineComponent({
           }
           return passed
         })
-        inputRef.error = !appPassed
+        inputRef.error = !allPassed
+        return allPassed
       }
+      return true
     }
     const updateValue = (e: KeyboardEvent) => {
       const targetValue = (e.target as HTMLInputElement).value
       inputRef.val = targetValue
       context.emit('update:modelValue', targetValue)
     }
+    onMounted(() => {
+      emitter.emit('form-item-created', validateInput)
+    })
     return {
       inputRef,
       validateInput,
