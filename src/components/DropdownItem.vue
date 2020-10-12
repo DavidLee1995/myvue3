@@ -2,19 +2,21 @@
  * @Description:
  * @Version: 2.0
  * @Autor: LXL
- * @Date: 2020-10-10 14:38:54
+ * @Date: 2020-10-12 08:31:06
  * @LastEditors: LXL
- * @LastEditTime: 2020-10-10 16:46:44
+ * @LastEditTime: 2020-10-12 08:36:07
 -->
 <template>
-  <li class="dropdown-oprion" :class="{ 'is-disabled': disabled }">
+  <li class="dropdown-option" :class="{ 'is-disabled': disabled }">
     <slot></slot>
   </li>
 </template>
-<script lang='ts'>
+
+<script lang="ts">
 import { defineComponent } from 'vue'
+
 export default defineComponent({
-  name: 'DropdownItem',
+  name: 'Drodown',
   props: {
     disabled: {
       type: Boolean,
@@ -23,8 +25,8 @@ export default defineComponent({
   }
 })
 </script>
-<style >
-.dropdown-oprion.is-disabled * {
+<style>
+.dropdown-option.is-disabled * {
   color: #6c757d;
   pointer-events: none;
   background-color: transparent;

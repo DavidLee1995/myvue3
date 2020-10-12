@@ -4,7 +4,7 @@
  * @Autor: LXL
  * @Date: 2020-10-10 13:24:06
  * @LastEditors: LXL
- * @LastEditTime: 2020-10-10 16:56:08
+ * @LastEditTime: 2020-10-12 08:35:59
 -->
 <template>
   <div class="dropdown" ref="dropdownRef">
@@ -19,10 +19,12 @@
     </ul>
   </div>
 </template>
+
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
+import useClickOutside from '../hooks/useClickOutside'
 export default defineComponent({
-  name: 'Dropdown',
+  name: 'Drodown',
   props: {
     title: {
       type: String,
@@ -31,22 +33,15 @@ export default defineComponent({
   },
   setup () {
     const isOpen = ref(false)
-    const dropdownRef = ref < null | HTMLElement >(null)
+    const dropdownRef = ref<null | HTMLElement>(null)
     const toggleOpen = () => {
       isOpen.value = !isOpen.value
     }
-    const handler = (e: MouseEvent) => {
-      if (dropdownRef.value) {
-        if (!dropdownRef.value.contains(e.target as HTMLElement) && isOpen.value) {
-          isOpen.value = false
-        }
+    const isClickOutside = useClickOutside(dropdownRef)
+    watch(isClickOutside, () => {
+      if (isOpen.value && isClickOutside.value) {
+        isOpen.value = false
       }
-    }
-    onMounted(() => {
-      document.addEventListener('click', handler)
-    })
-    onUnmounted(() => {
-      document.removeEventListener('click', handler)
     })
     return {
       isOpen,

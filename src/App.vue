@@ -4,11 +4,11 @@
  * @Autor: LXL
  * @Date: 2020-10-07 22:28:31
  * @LastEditors: LXL
- * @LastEditTime: 2020-10-10 13:22:03
+ * @LastEditTime: 2020-10-12 08:36:43
 -->
 <template>
   <div class="container">
-    <CloabalHeader :user="currentUser"></CloabalHeader>
+    <ClobalHeader :user="currentUser"></ClobalHeader>
     <ColumnList :list="list"></ColumnList>
   </div>
 </template>
@@ -17,7 +17,7 @@
 import { defineComponent } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
-import CloabalHeader, { UserProps } from './components/GlobalHeader.vue'
+import ClobalHeader, { UserProps } from './components/GlobalHeader.vue'
 const currentUser: UserProps = {
   isLogin: true,
   name: 'LXL'
@@ -51,7 +51,7 @@ export default defineComponent({
   name: 'App',
   components: {
     ColumnList,
-    CloabalHeader
+    ClobalHeader
   },
   setup () {
     return {
@@ -62,5 +62,4 @@ export default defineComponent({
 })
 </script>
 
-<style>
-</style>
+<style></style>
