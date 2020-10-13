@@ -8,88 +8,43 @@
 -->
 <template>
   <div class="container">
-    <ClobalHeader :user="currentUser"></ClobalHeader>
-    <!-- <ColumnList :list="list"></ColumnList> -->
-    <validate-form @form-submit="onFormSubmit">
-      <div class="form-group mb-3">
-        <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
-        <validate-input type='text' placeholder="请输入邮箱地址" v-model="emailVal" :rules="emailRules" ref="inputRef"></validate-input>
-      </div>
-      <div class="form-group mb-3">
-        <label for="exampleInputEmail1" class="form-label">密码</label>
-        <validate-input type='password' placeholder="请输入密码" v-model="passwordVal" :rules="passwordRules"></validate-input>
-      </div>
-      <template #submit>
-        <button class="btn btn-danger">Submit</button>
-      </template>
-    </validate-form>
+    <global-header :user="currentUser"></global-header>
+    <router-view></router-view>
+    <footer class="text-center py-4 text-secondary bg-light mt-6">
+      <small>
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">© 2020 者也专栏</li>
+          <li class="list-inline-item">课程</li>
+          <li class="list-inline-item">文档</li>
+          <li class="list-inline-item">联系</li>
+          <li class="list-inline-item">更多</li>
+        </ul>
+      </small>
+    </footer>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import ClobalHeader, { UserProps } from './components/GlobalHeader.vue'
-import ValidateInput, { RulesProp } from './components/ValidateInput.vue'
-import ValidateForm from './components/ValidateForm.vue'
+import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
 // import ColumnList, { ColumnProps } from './components/ColumnList.vue'
 
 const currentUser: UserProps = {
-  isLogin: true,
+  isLogin: false,
   name: 'LXL'
 }
-const emailReg = /^([a-zA-Z]|[0-9])(\w|\\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
 export default defineComponent({
   name: 'App',
   components: {
     // ColumnList,
-    ClobalHeader,
-    ValidateInput,
-    ValidateForm
+    GlobalHeader
+
   },
   setup () {
-    const inputRef = ref<any>()
-    const emailRef = reactive({
-      val: '',
-      error: false,
-      message: ''
-    })
-    const emailVal = ref('123@163.com')
-    const passwordVal = ref('123')
-    const emailRules: RulesProp = [
-      { type: 'required', message: '电子郵箱地址不能为空' },
-      { type: 'email', message: '请输入正确的电子邮箱格式' }
-    ]
-    const passwordRules: RulesProp = [
-      { type: 'password', message: '密码不能为空' }
-    ]
-
-    const validateEmail = () => {
-      if (emailRef.val.trim() === '') {
-        emailRef.error = true
-        emailRef.message = 'can not be empty'
-      } else if (!emailReg.test(emailRef.val)) {
-        emailRef.error = true
-        emailRef.message = 'should be valid email'
-      } else {
-        emailRef.error = false
-      }
-    }
-    const onFormSubmit = (result: boolean) => {
-      console.log('result', inputRef.value.validateInput())
-      console.log(123, result)
-    }
     return {
-      // list: testData,
-      currentUser,
-      emailRef,
-      validateEmail,
-      emailRules,
-      emailVal,
-      passwordVal,
-      passwordRules,
-      onFormSubmit,
-      inputRef
+      currentUser
+
     }
   }
 })

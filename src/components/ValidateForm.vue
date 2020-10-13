@@ -20,11 +20,13 @@ export default defineComponent({
   setup (props, context) {
     let funcArr: ValidateFunc[] = []
     const submitForm = () => {
-      const result = funcArr.every((func) => func())
-      context.emit('form-submit', true)
+      const result = funcArr.map((func) => func()).every(result => result)
+      context.emit('form-submit', result)
     }
-    const callback = (func?: ValidateFunc) => {
-      funcArr.push(func)
+    const callback = (func: ValidateFunc | undefined) => {
+      if (func) {
+        funcArr.push(func)
+      }
     }
     emitter.on('form-item-created', callback)
     onUnmounted(() => {
