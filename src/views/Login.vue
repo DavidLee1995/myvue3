@@ -18,6 +18,7 @@ import { defineComponent, reactive, ref } from 'vue'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 const emailReg = /^([a-zA-Z]|[0-9])(\w|\\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
 export default defineComponent({
   name: 'Home',
@@ -28,6 +29,7 @@ export default defineComponent({
   setup () {
     const inputRef = ref<any>()
     const router = useRouter()
+    const store = useStore()
     const emailRef = reactive({
       val: '',
       error: false,
@@ -57,6 +59,7 @@ export default defineComponent({
       console.log('result', result)
       if (result) {
         router.push({ path: '/' })
+        store.commit('login')
       }
     }
     return {

@@ -16,41 +16,22 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import ColumnList, { ColumnProps } from '../components/ColumnList.vue'
-const testData: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'test1的专栏',
-    description: '这是test1专栏，有一段简单的介绍',
-    avatar: require('../assets/logo.png')
-  },
-  {
-    id: 2,
-    title: 'test2的专栏',
-    description: '这是test2专栏，有一段简单的介绍'
-  },
-  {
-    id: 3,
-    title: 'test3的专栏',
-    description: '这是test3专栏，有一段简单的介绍',
-    avatar: require('../assets/logo.png')
-  },
-  {
-    id: 4,
-    title: 'test4的专栏',
-    description: '这是test4专栏，有一段简单的介绍',
-    avatar: require('../assets/logo.png')
-  }
-]
+import { GlobalDataProps } from '../store'
+import { useStore } from 'vuex'
 export default defineComponent({
   name: 'Home',
   components: {
     ColumnList
   },
   setup () {
+    const store = useStore<GlobalDataProps>()
+    const list = computed(() => {
+      return store.state.columns
+    })
     return {
-      list: testData
+      list
     }
   }
 })

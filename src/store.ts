@@ -1,18 +1,17 @@
 import { createStore } from 'vuex'
 import { testData, testPosts, ColumnProps, PostProps } from './testData'
-
 interface UserProps {
-    isLogin: boolean;
-    name?: string;
-    id?: number;
+  isLogin: boolean;
+  name?: string;
+  id?: number;
+}
+export interface GlobalDataProps {
+  columns: ColumnProps[];
+  posts: PostProps[];
+  user: UserProps;
 }
 
-export interface GloableDataProps {
-    colunms: ColumnProps[];
-    props: PostProps[];
-    user: UserProps;
-}
-const store = createStore<GloableDataProps|null>(
+const store = createStore<GlobalDataProps>(
   {
     state: {
       columns: testData,
@@ -21,7 +20,14 @@ const store = createStore<GloableDataProps|null>(
         isLogin: false
       }
     },
-    mutations: {}
+    mutations: {
+      login (state) {
+        state.user = { ...state.user, isLogin: true, name: 'LXL' }
+      }
+    }
   }
 )
+
+console.log(store.state.user)
+
 export default store
