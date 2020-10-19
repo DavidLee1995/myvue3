@@ -1,6 +1,7 @@
 <template>
   <div class="validate-input-container pd-3">
     <input
+      v-if="tag != 'textarea'"
       v-bind="$attrs"
       class="form-control"
       :class="{ 'is-invalid': inputRef.error }"
@@ -8,6 +9,15 @@
       @blur="validateInput"
       @input="updateValue"
     />
+    <textarea
+      v-else
+      v-bind="$attrs"
+      class="form-control"
+      :class="{ 'is-invalid': inputRef.error }"
+      :value="inputRef.val"
+      @blur="validateInput"
+      @input="updateValue"
+    ></textarea>
     <span v-if="inputRef.error" class="invalid-feedback">{{
       inputRef.message
     }}</span>
@@ -23,11 +33,16 @@ interface RuleProp {
   validator?: () => boolean;
 }
 export type RulesProp = RuleProp[];
+export type TagType = 'input' | 'textarea';
 export default defineComponent({
   name: 'ValidateInput',
   props: {
     rules: Array as PropType<RulesProp>,
-    modelValue: String
+    modelValue: String,
+    tag: {
+      type: String as PropType<TagType>,
+      default: 'input'
+    }
   },
   inheritAttrs: false, // 不希望組件继承根元素
   setup (props, context) {
@@ -38,12 +53,12 @@ export default defineComponent({
     })
     const validateInput = () => {
       if (props.rules) {
-        const allPassed = props.rules.every(rule => {
+        const allPassed = props.rules.every((rule) => {
           let passed = true
           inputRef.message = rule.message
           switch (rule.type) {
             case 'required':
-              passed = (inputRef.val.trim() !== '')
+              passed = inputRef.val.trim() !== ''
               break
             case 'email':
               passed = emailReg.test(inputRef.val)

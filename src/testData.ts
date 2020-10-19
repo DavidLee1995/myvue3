@@ -12,6 +12,7 @@ export interface PostProps {
   createdAt: string;
   columnId: number;
 }
+
 export const testData: ColumnProps[] = [
   {
     id: 1,

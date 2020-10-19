@@ -1,14 +1,31 @@
 import { createStore } from 'vuex'
-import { testData, testPosts, ColumnProps, PostProps } from './testData'
+import { testData, testPosts, ColumnProps } from './testData'
 interface UserProps {
   isLogin: boolean;
   name?: string;
   id?: number;
+  columnId?: number;
 }
 export interface GlobalDataProps {
   columns: ColumnProps[];
   posts: PostProps[];
   user: UserProps;
+}
+
+export interface ImageProps {
+  _id?: string;
+  url?: string;
+  createdAt?: string;
+  fitUrl?: string;
+}
+
+export interface PostProps {
+  id: number;
+  title: string;
+  content: string;
+  image?: string;
+  createdAt: string;
+  columnId: number;
 }
 
 const store = createStore<GlobalDataProps>(
@@ -17,17 +34,31 @@ const store = createStore<GlobalDataProps>(
       columns: testData,
       posts: testPosts,
       user: {
-        isLogin: false
+        isLogin: true,
+        name: 'LXL',
+        columnId: 1
       }
     },
     mutations: {
       login (state) {
         state.user = { ...state.user, isLogin: true, name: 'LXL' }
+      },
+      createPost (state, newPost) {
+        state.posts.push(newPost)
+      }
+    },
+    getters: {
+      biggerColumnLen (state) {
+        return state.columns.filter(c => c.id > 2).length
+      },
+      getColumnById: (state) => (id: number) => {
+        return state.columns.find(c => c.id === id)
+      },
+      getPostsByCid: (state) => (cid: number) => {
+        return state.posts.filter(post => post.columnId === cid)
       }
     }
   }
 )
-
-console.log(store.state.user)
 
 export default store
