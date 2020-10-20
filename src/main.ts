@@ -9,11 +9,14 @@ axios.interceptors.request.use(config => {
   config.params = { ...config.params, icode: 'BA48C4907208B29B' }
   return config
 })
-
-axios.get('/columns').then(resp => {
-  console.log(resp.data)
+axios.interceptors.request.use(config => {
+  store.commit('setLoading', true)
+  return config
 })
-
+axios.interceptors.response.use(config => {
+  store.commit('setLoading', false)
+  return config
+})
 const app = createApp(App)
 app.use(router)
 app.use(store)

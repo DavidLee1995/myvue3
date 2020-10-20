@@ -16,7 +16,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 import ColumnList from '../components/ColumnList.vue'
 import { GlobalDataProps } from '../store'
 import { useStore } from 'vuex'
@@ -29,6 +29,9 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>()
     const list = computed(() => {
       return store.state.columns
+    })
+    onMounted(() => {
+      store.dispatch('fatachColumns')
     })
     return {
       list

@@ -3,9 +3,9 @@
     <div class="column-info row mb-4 border-bottom pb-4 align-items-center">
       <div class="col-3 text-center">
         <img
-          :src="column.avatar"
+          :src="column.avatar && column.avatar.url"
           :alt="column.title"
-          class="rounded-circle border"
+          class="rounded-circle border w-100"
         />
       </div>
       <div class="col-9">
@@ -17,9 +17,8 @@
   </div>
 </template>
 <script lang='ts'>
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { testData, testPosts } from '../testData'
 import PostList from '../components/PostList.vue'
 import store from '@/store'
 export default defineComponent({
@@ -29,9 +28,13 @@ export default defineComponent({
   },
   setup () {
     const route = useRoute()
-    const currentId = +route.params.id
+    const currentId = route.params.id
     const column = computed(() => store.getters.getColumnById(currentId))
     const list = computed(() => store.getters.getPostsByCid(currentId))
+    onMounted(() => {
+      store.dispatch('fatchColumn', currentId)
+      store.dispatch('fatchPosts', currentId)
+    })
     return {
       list,
       column

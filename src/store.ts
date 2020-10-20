@@ -1,5 +1,5 @@
-import { createStore } from 'vuex'
-import { testData, testPosts, ColumnProps } from './testData'
+import { createStore, Commit } from 'vuex'
+import axios from 'axios'
 interface UserProps {
   isLogin: boolean;
   name?: string;
@@ -7,6 +7,7 @@ interface UserProps {
   columnId?: number;
 }
 export interface GlobalDataProps {
+  loading: boolean;
   columns: ColumnProps[];
   posts: PostProps[];
   user: UserProps;
@@ -19,20 +20,33 @@ export interface ImageProps {
   fitUrl?: string;
 }
 
-export interface PostProps {
-  id: number;
+export interface ColumnProps {
+  _id: string;
   title: string;
+  avatar?: ImageProps;
+  description: string;
+}
+export interface PostProps {
+  _id: string;
+  title: string;
+  excerpt?: string;
   content: string;
-  image?: string;
-  createdAt: string;
-  columnId: number;
+  image?: ImageProps;
+  createdAt?: string;
+  column: string;
+}
+
+const getAndCommit = async (url: string, mutationName: string, commit: Commit) => {
+  const { data } = await axios.get(url)
+  commit(mutationName, data)
 }
 
 const store = createStore<GlobalDataProps>(
   {
     state: {
-      columns: testData,
-      posts: testPosts,
+      loading: false,
+      columns: [],
+      posts: [],
       user: {
         isLogin: true,
         name: 'LXL',
@@ -45,17 +59,37 @@ const store = createStore<GlobalDataProps>(
       },
       createPost (state, newPost) {
         state.posts.push(newPost)
+      },
+      fatachColumns (state, rawData) {
+        state.columns = rawData.data.list
+      },
+      fatchColumn (state, rawData) {
+        state.columns = [rawData.data]
+      },
+      fatchPosts (state, rawData) {
+        state.posts = rawData.data.list
+      },
+      setLoading (state, status) {
+        state.loading = status
+      }
+    },
+    actions: {
+      fatachColumns ({ commit }) {
+        getAndCommit('/columns', 'fatachColumns', commit)
+      },
+      fatchColumn ({ commit }, cid) {
+        getAndCommit(`/columns/${cid}`, 'fatchColumn', commit)
+      },
+      fatchPosts ({ commit }, cid) {
+        getAndCommit(`/columns/${cid}/posts`, 'fatchPosts', commit)
       }
     },
     getters: {
-      biggerColumnLen (state) {
-        return state.columns.filter(c => c.id > 2).length
+      getColumnById: (state) => (id: string) => {
+        return state.columns.find(c => c._id === id)
       },
-      getColumnById: (state) => (id: number) => {
-        return state.columns.find(c => c.id === id)
-      },
-      getPostsByCid: (state) => (cid: number) => {
-        return state.posts.filter(post => post.columnId === cid)
+      getPostsByCid: (state) => (cid: string) => {
+        return state.posts.filter(post => post.column === cid)
       }
     }
   }
