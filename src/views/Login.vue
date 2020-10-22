@@ -1,17 +1,28 @@
 <template>
   <validate-form @form-submit="onFormSubmit">
-      <div class="form-group mb-3">
-        <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
-        <validate-input type='text' placeholder="请输入邮箱地址" v-model="emailVal" :rules="emailRules" ref="inputRef"></validate-input>
-      </div>
-      <div class="form-group mb-3">
-        <label for="exampleInputEmail1" class="form-label">密码</label>
-        <validate-input type='password' placeholder="请输入密码" v-model="passwordVal" :rules="passwordRules"></validate-input>
-      </div>
-      <template #submit>
-        <button class="btn btn-primary">提交</button>
-      </template>
-    </validate-form>
+    <div class="form-group mb-3">
+      <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
+      <validate-input
+        type="text"
+        placeholder="请输入邮箱地址"
+        v-model="emailVal"
+        :rules="emailRules"
+        ref="inputRef"
+      ></validate-input>
+    </div>
+    <div class="form-group mb-3">
+      <label for="exampleInputEmail1" class="form-label">密码</label>
+      <validate-input
+        type="password"
+        placeholder="请输入密码"
+        v-model="passwordVal"
+        :rules="passwordRules"
+      ></validate-input>
+    </div>
+    <template #submit>
+      <button class="btn btn-primary">提交</button>
+    </template>
+  </validate-form>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
@@ -58,8 +69,14 @@ export default defineComponent({
     const onFormSubmit = (result: boolean) => {
       console.log('result', result)
       if (result) {
-        router.push({ path: '/' })
-        store.commit('login')
+        const payload = {
+          email: emailVal.value,
+          password: passwordVal.value
+        }
+        store.dispatch('login', payload).then((data) => {
+          console.log(data)
+          router.push({ path: '/' })
+        })
       }
     }
     return {
