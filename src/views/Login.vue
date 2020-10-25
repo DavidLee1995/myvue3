@@ -71,11 +71,14 @@ export default defineComponent({
       if (result) {
         const payload = {
           email: emailVal.value,
-          password: passwordVal.value
+          password: passwordVal.value,
+          icode: 'BA48C4907208B29B'
         }
-        store.dispatch('login', payload).then((data) => {
+        store.dispatch('loginAndFetch', payload).then(data => {
           console.log(data)
           router.push({ path: '/' })
+        }).catch(e => {
+          console.log(e)
         })
       }
     }

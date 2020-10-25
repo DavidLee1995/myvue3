@@ -1,12 +1,20 @@
 import { createStore, Commit } from 'vuex'
 import axios from 'axios'
-interface UserProps {
+export interface UserProps {
   isLogin: boolean;
-  name?: string;
-  id?: number;
-  columnId?: number;
+  nickName?: string;
+  id?: string;
+  column?: string;
+  email?: string;
 }
+
+export interface GlobalErrorProps {
+  status: boolean;
+  message?: string;
+}
+
 export interface GlobalDataProps {
+  error: GlobalErrorProps;
   token: string;
   loading: boolean;
   columns: ColumnProps[];
@@ -50,14 +58,13 @@ const postAndCommit = async (url: string, mutationName: string, commit: Commit, 
 const store = createStore<GlobalDataProps>(
   {
     state: {
-      token: '',
+      error: { status: false },
+      token: localStorage.getItem('token') || '',
       loading: false,
       columns: [],
       posts: [],
       user: {
-        isLogin: false,
-        name: 'LXL',
-        columnId: 1
+        isLogin: false
       }
     },
     mutations: {
@@ -79,8 +86,17 @@ const store = createStore<GlobalDataProps>(
       setLoading (state, status) {
         state.loading = status
       },
+      setError (state, e: GlobalErrorProps) {
+        state.error = e
+      },
       login (state, rawData) {
+        const { token } = rawData.data
         state.token = rawData.token
+        localStorage.setItem('token', token)
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      },
+      fetchCurrentUser (state, rawData) {
+        state.user = { isLogin: true, ...rawData.data }
       }
     },
     actions: {
@@ -95,6 +111,14 @@ const store = createStore<GlobalDataProps>(
       },
       login ({ commit }, payload) {
         return postAndCommit('/user/login', 'login', commit, payload)
+      },
+      fetchCurrentUser ({ commit }) {
+        getAndCommit('/user/current', 'fetchCurrentUser', commit)
+      },
+      loginAndFetch ({ dispatch }, loginData) {
+        return dispatch('login', loginData).then(() => {
+          return dispatch('fetchCurrentUser')
+        })
       }
     },
     getters: {
