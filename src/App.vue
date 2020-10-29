@@ -11,6 +11,7 @@
     <global-header :user="currentUser"></global-header>
     <h1>{{error.message}}</h1>
     <loader v-if="isLoading"></loader>
+    <message type="error"></message>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
       <small>
@@ -34,12 +35,14 @@ import GlobalHeader from './components/GlobalHeader.vue'
 import Loader from './components/Loader.vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from './store'
+import Message from './components/Message.vue'
 export default defineComponent({
   name: 'App',
   components: {
     // ColumnList,
     GlobalHeader,
-    Loader
+    Loader,
+    Message
   },
   setup () {
     const store = useStore<GlobalDataProps>()
