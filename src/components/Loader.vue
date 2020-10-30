@@ -14,7 +14,7 @@
 </template>
 <script>
 import { defineComponent, onUnmounted } from 'vue'
-
+import useDOMCreate from '../hooks/useDOMCreate'
 export default defineComponent({
   name: 'Loader',
   props: {
@@ -26,12 +26,7 @@ export default defineComponent({
     }
   },
   setup () {
-    const node = document.createElement('div')
-    node.id = 'back'
-    document.body.appendChild(node)
-    onUnmounted(() => {
-      document.body.removeChild(node)
-    })
+    useDOMCreate('back')
   }
 })
 </script>
