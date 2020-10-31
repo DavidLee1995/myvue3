@@ -11,6 +11,7 @@
         </div>
       </div>
     </section>
+    <uploader action="/upload"></uploader>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
     <column-list :list="list"></column-list>
   </div>
@@ -18,12 +19,14 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue'
 import ColumnList from '../components/ColumnList.vue'
+import uploader from '../components/Uploader.vue'
 import { GlobalDataProps } from '../store'
 import { useStore } from 'vuex'
 export default defineComponent({
   name: 'Home',
   components: {
-    ColumnList
+    ColumnList,
+    uploader
   },
   setup () {
     const store = useStore<GlobalDataProps>()

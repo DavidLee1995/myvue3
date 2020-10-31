@@ -1,6 +1,7 @@
 <template>
   <div class="create-post-page">
     <h4>新建文章</h4>
+    <input type="file" name="file" @change.prevent="handleFileChange">
     <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">文章标题：</label>
@@ -32,6 +33,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
+import axios from 'axios'
 import ValidateForm from '../components/ValidateForm.vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps, PostProps } from '../store'
@@ -56,16 +58,31 @@ export default defineComponent({
       if (result) {
         const { column } = store.state.user
         if (column) {
-          // const newPost: PostProps = {
-          //   id: new Date().getTime(),
-          //   title: titleVal.value,
-          //   content: contentVal.value,
-          //   columnId,
-          //   createdAt: new Date().toLocaleString()
-          // }
-          // store.commit('createPost', newPost)
+          const newPost: PostProps = {
+            title: titleVal.value,
+            content: contentVal.value,
+            column
+          }
+          store.commit('createPost', newPost)
           router.push({ name: 'Column', params: { id: column } })
         }
+      }
+    }
+    const handleFileChange = (e: Event) => {
+      const target = e.target as HTMLInputElement
+      const files = target.files
+      if (files) {
+        const uploadedFile = files[0]
+        const formData = new FormData()
+        formData.append(uploadedFile.name, uploadedFile)
+        formData.append('icode', 'BA48C4907208B29B')
+        axios.post('/upload', formData, {
+          headers: {
+            'Content-Type': 'muntipart/form-data'
+          }
+        }).then((resp: any) => {
+          console.log(resp)
+        })
       }
     }
     return {
@@ -73,7 +90,8 @@ export default defineComponent({
       titleVal,
       contentVal,
       contentRules,
-      onFormSubmit
+      onFormSubmit,
+      handleFileChange
     }
   }
 })

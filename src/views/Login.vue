@@ -28,6 +28,7 @@
 import { defineComponent, reactive, ref } from 'vue'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
+import createMessage from '../hooks/createMessage'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 const emailReg = /^([a-zA-Z]|[0-9])(\w|\\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
@@ -75,8 +76,10 @@ export default defineComponent({
           icode: 'BA48C4907208B29B'
         }
         store.dispatch('loginAndFetch', payload).then(data => {
-          console.log(data)
-          router.push({ path: '/' })
+          createMessage('登录成功，2秒后跳转首页', 'success')
+          setTimeout(() => {
+            router.push({ path: '/' })
+          }, 2000)
         }).catch(e => {
           console.log(e)
         })

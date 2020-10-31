@@ -33,7 +33,7 @@ interface RuleProp {
   validator?: () => boolean;
 }
 export type RulesProp = RuleProp[];
-export type TagType = 'input' | 'textarea';
+export type TagType = 'input' | 'textarea' | 'custom';
 export default defineComponent({
   name: 'ValidateInput',
   props: {
