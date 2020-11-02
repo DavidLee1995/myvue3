@@ -73,7 +73,7 @@ export default defineComponent({
         const payload = {
           email: emailVal.value,
           password: passwordVal.value,
-          icode: 'BA48C4907208B29B'
+          icode: '5466D63AF5785F85'
         }
         store.dispatch('loginAndFetch', payload).then(data => {
           createMessage('登录成功，2秒后跳转首页', 'success')

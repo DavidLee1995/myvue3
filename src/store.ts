@@ -45,6 +45,12 @@ export interface PostProps {
   column: string;
 }
 
+export interface ResponseType<p = {}> {
+  code: number;
+  msg: string;
+  data: p;
+}
+
 const getAndCommit = async (url: string, mutationName: string, commit: Commit) => {
   const { data } = await axios.get(url)
   commit(mutationName, data)

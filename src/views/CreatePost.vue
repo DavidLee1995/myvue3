@@ -75,7 +75,7 @@ export default defineComponent({
         const uploadedFile = files[0]
         const formData = new FormData()
         formData.append(uploadedFile.name, uploadedFile)
-        formData.append('icode', 'BA48C4907208B29B')
+        formData.append('icode', '5466D63AF5785F85')
         axios.post('/upload', formData, {
           headers: {
             'Content-Type': 'muntipart/form-data'

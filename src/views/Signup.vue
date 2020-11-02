@@ -88,7 +88,7 @@ export default defineComponent({
           email: formData.email,
           password: formData.password,
           nickName: formData.nickName,
-          icode: 'BA48C4907208B29B'
+          icode: '5466D63AF5785F85'
         }
         axios
           .post('/users/', payload)
